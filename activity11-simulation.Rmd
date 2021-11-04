@@ -25,7 +25,10 @@ One way to make sure that you get similar results each time is to always run all
 
 For this activity, you will need the `{tidyverse}`.
 
-**delete this line and load `{tidyverse}`**
+```{r}
+library (tidyverse)
+```
+
 
 
 ## Exploration
@@ -60,10 +63,23 @@ ggplot(norm_samp_1000, aes(x = values)) +
 Using `norm_samp_1000`, obtain the mean and standard deviation of this sample?
 
 
+```{r}
+norm_samp_1000 %>% 
+  summarise(n1000_mean = mean(norm_samp_1000$values),n1000_sd = sd(norm_samp_1000$values))
+```
 
 Now, create a new simulation.
 In this you will obtain a sample of size 30 from from a Normally distributed variable with a mean 50 and standard deviation 10, and find the mean and standard deviation.
 How do the mean and standard deviation compare to your answers above?
+
+```{r}
+norm_samp_30 <- tibble(
+  valuess = rnorm(n = 30, mean = 50, sd = 10))
+  
+norm_samp_30 %>% 
+  summarise(n30_mean = mean(norm_samp_30$valuess),n30_sd = sd(norm_samp_30$valuess))
+
+```
 
 
 
@@ -73,6 +89,21 @@ Using a similar process, obtain Exponentially distributed variable (`?rexp`) wit
 Obtain a sample of 1,000 observations and a sample of 30 observations.
 Then, calculate the mean and standard deviation of each sample and discuss how the values are similar and how they differ.
 
+```{r}
+
+non_norm_samp_1000 <- tibble(
+  valuesss = rexp(n = 1000, rate = 0.02)
+)
+non_norm_samp_1000 %>% 
+  summarise(non_n1000_mean = mean(non_norm_samp_1000$valuesss),non_n1000_sd = sd(non_norm_samp_1000$valuesss))
+
+non_norm_samp_30 <- tibble(
+  valuessss = rexp(n = 30, rate = 0.02)
+)
+non_norm_samp_30 %>% 
+  summarise(non_n30_mean = mean(non_norm_samp_30$valuessss),non_n30_sd = sd(non_norm_samp_30$valuessss))
+
+```
 
 
 
@@ -92,6 +123,17 @@ This function should produce a dataset with `n` rows.
 You should **not** use the default parameter options for these distributions (e.g., your Normal data should not have a mean of 0 or a standard deviation of 1).
 Test your function with `n = 30` and `n = 1000`.
 
+```{r}
+generate_n_samples <- function(size,mean,std_dev,prate,pdf,pmin,pmax){
+  final <- tibble::tibble(
+    Ndistr = rnorm(n = size, mean = mean, sd = std_dev),
+    Edistr = rexp(n = size, rate = prate),
+    Csqure = rchisq(n = size, df = pdf),
+    Udistr = runif(n = size, min = pmin, max = pmax)
+  )
+  return (final)
+}
+```
 
 
 
